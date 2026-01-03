@@ -1,6 +1,16 @@
 # Habbit
 
-A React Native Hello World application built with Expo.
+A React Native application built with Expo, featuring modern UI libraries and tools.
+
+## Tech Stack
+
+- **UI**: Tamagui
+- **Animation**: React Native Reanimated + Gesture Handler
+- **Navigation**: Expo Router
+- **Icons**: Lucide Icons
+- **Fonts**: Inter / Manrope / Satoshi (see FONTS_SETUP.md)
+- **Storage**: MMKV (fast) or AsyncStorage (simple)
+- **Theming**: Tamagui Theme System
 
 ## Getting Started
 
@@ -65,21 +75,58 @@ npm run web        # Web browser
 
 ## Project Structure
 
-- `App.js` - Main application component with Hello World
+- `app/` - Expo Router file-based routing
+  - `_layout.tsx` - Root layout with Tamagui provider
+  - `index.tsx` - Home screen
+- `utils/` - Utility functions
+  - `storage.ts` - MMKV and AsyncStorage helpers
+- `tamagui.config.ts` - Tamagui configuration
+- `babel.config.js` - Babel configuration (includes Reanimated plugin)
 - `app.json` - Expo configuration file
 - `package.json` - Project dependencies and scripts
-- `babel.config.js` - Babel configuration for Expo
 
 ## Features
 
 - ✅ Expo managed workflow
-- ✅ Easy development with Expo Go
+- ✅ Expo Router for navigation
+- ✅ Tamagui UI components
+- ✅ React Native Reanimated for animations
+- ✅ Gesture Handler for gestures
+- ✅ Lucide icons
+- ✅ MMKV & AsyncStorage for data persistence
+- ✅ Custom fonts support (Inter, Manrope, Satoshi)
 - ✅ Cross-platform (iOS, Android, Web)
 - ✅ Hot reloading
-- ✅ No native code setup required
+
+## Setup Instructions
+
+### Fonts
+See [FONTS_SETUP.md](./FONTS_SETUP.md) for instructions on adding custom fonts.
+
+### Storage
+Storage utilities are available in `utils/storage.ts`:
+- **MMKV**: Fast, synchronous key-value storage
+- **AsyncStorage**: Simple, asynchronous key-value storage
+
+Example:
+```typescript
+import { mmkv, asyncStorage } from './utils/storage';
+
+// MMKV (synchronous, faster)
+mmkv.set('key', 'value');
+const value = mmkv.getString('key');
+
+// AsyncStorage (asynchronous)
+await asyncStorage.setItem('key', 'value');
+const value = await asyncStorage.getItem('key');
+```
 
 ## Learn More
 
 - [Expo Documentation](https://docs.expo.dev/)
-- [React Native Documentation](https://reactnative.dev/docs/getting-started)
-- [Expo GitHub](https://github.com/expo/expo)
+- [Expo Router](https://docs.expo.dev/router/introduction/)
+- [Tamagui](https://tamagui.dev/)
+- [React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/)
+- [React Native Gesture Handler](https://docs.swmansion.com/react-native-gesture-handler/)
+- [Lucide Icons](https://lucide.dev/)
+- [MMKV](https://github.com/mrousavy/react-native-mmkv)
