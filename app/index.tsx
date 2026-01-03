@@ -1,105 +1,40 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView, useColorScheme } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useSharedValue, withSpring } from 'react-native-reanimated';
-import Animated, { useAnimatedStyle } from 'react-native-reanimated';
+import { useRouter } from 'expo-router';
+import { AnimatedLogo } from '../modules/common/components/AnimatedLogo';
 
-export default function HomeScreen() {
-  const colorScheme = useColorScheme();
-  const scale = useSharedValue(1);
-  const [pressed, setPressed] = useState(false);
-
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ scale: scale.value }],
-    };
-  });
-
-  const handlePress = () => {
-    scale.value = withSpring(scale.value === 1 ? 1.2 : 1);
-    setPressed(!pressed);
-  };
-
-  const isDark = colorScheme === 'dark';
-  const backgroundColor = isDark ? '#000000' : '#FFFFFF';
-  const textColor = isDark ? '#FFFFFF' : '#000000';
-  const cardBg = isDark ? '#1C1C1E' : '#F5F5F5';
+export default function OnboardingScreen() {
+  const router = useRouter();
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor }]}>
-      <StatusBar style="auto" />
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        style={{ backgroundColor }}
-      >
-        <View style={styles.header}>
-          <Text style={[styles.title, { color: textColor }]}>
-            Hello World!
-          </Text>
-          <Text style={[styles.subtitle, { color: textColor }]}>
-            Welcome to React Native with Expo
-          </Text>
-          <Text style={[styles.description, { color: textColor }]}>
-            Powered by Tamagui, Reanimated & Expo Router
-          </Text>
+    <SafeAreaView style={styles.container}>
+      <StatusBar style="light" />
+      
+      {/* Illustration Area */}
+      <View style={styles.illustrationContainer}>
+        <View style={styles.illustration}>
+          {/* Animated Logo */}
+          <AnimatedLogo />
         </View>
+      </View>
 
-        <View style={[styles.card, { backgroundColor: cardBg }]}>
-          <Text style={[styles.cardTitle, { color: textColor }]}>
-            Libraries Installed
-          </Text>
-          <View style={styles.list}>
-            <View style={styles.listItem}>
-              <View style={{ width: 16, height: 16, backgroundColor: '#FF6B6B', borderRadius: 8 }} />
-              <Text style={[styles.listText, { color: textColor }]}>
-                Tamagui UI
-              </Text>
-            </View>
-            <View style={styles.listItem}>
-              <View style={{ width: 16, height: 16, backgroundColor: '#4ECDC4', borderRadius: 8 }} />
-              <Text style={[styles.listText, { color: textColor }]}>
-                React Native Reanimated
-              </Text>
-            </View>
-            <View style={styles.listItem}>
-              <View style={{ width: 16, height: 16, backgroundColor: '#95E1D3', borderRadius: 8 }} />
-              <Text style={[styles.listText, { color: textColor }]}>
-                Gesture Handler
-              </Text>
-            </View>
-            <View style={styles.listItem}>
-              <View style={{ width: 16, height: 16, backgroundColor: '#F38181', borderRadius: 8 }} />
-              <Text style={[styles.listText, { color: textColor }]}>
-                Expo Router
-              </Text>
-            </View>
-          </View>
-        </View>
-
-        <Animated.View style={animatedStyle}>
-          <TouchableOpacity
-            onPress={handlePress}
-            style={[styles.button, { backgroundColor: '#007AFF' }]}
-          >
-            <Text style={styles.buttonText}>
-              {pressed ? 'Pressed!' : 'Tap Me (Reanimated)'}
-            </Text>
-          </TouchableOpacity>
-        </Animated.View>
-
-        <View style={[styles.card, { backgroundColor: cardBg }]}>
-          <Text style={[styles.infoText, { color: textColor }]}>
-            Fonts: Inter, Manrope, Satoshi (add to assets/fonts/)
-          </Text>
-          <Text style={[styles.infoText, { color: textColor }]}>
-            Storage: MMKV & AsyncStorage ready
-          </Text>
-          <Text style={[styles.infoText, { color: textColor }]}>
-            Icons: Lucide React Native
-          </Text>
-        </View>
-      </ScrollView>
+      {/* Content Block */}
+      <View style={styles.contentBlock}>
+        <Text style={styles.title}>Build Better Habits</Text>
+        <Text style={styles.description}>
+          Track Your Daily Habits And Achieve Your Goals One Step At A Time.
+        </Text>
+        
+        <TouchableOpacity 
+          style={styles.ctaButton}
+          onPress={() => router.push('/signup')}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.ctaButtonText}>Let's Get Started</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -107,72 +42,56 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
   },
-  scrollContent: {
-    padding: 16,
-    paddingTop: 32,
-  },
-  header: {
+  illustrationContainer: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 24,
+    paddingHorizontal: 40,
+    paddingTop: 60,
+    position: 'relative',
+  },
+  illustration: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  contentBlock: {
+    backgroundColor: '#000000',
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    paddingHorizontal: 32,
+    paddingTop: 40,
+    paddingBottom: 50,
+    minHeight: 280,
   },
   title: {
     fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 18,
-    marginBottom: 8,
-    textAlign: 'center',
+    fontWeight: '700',
+    color: '#FFFFFF',
+    marginBottom: 16,
+    textAlign: 'left',
   },
   description: {
-    fontSize: 14,
-    textAlign: 'center',
-    opacity: 0.7,
-  },
-  card: {
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  cardTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    marginBottom: 12,
-  },
-  list: {
-    gap: 12,
-  },
-  listItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  listText: {
     fontSize: 16,
+    color: '#FFFFFF',
+    lineHeight: 24,
+    marginBottom: 32,
+    opacity: 0.9,
   },
-  button: {
-    borderRadius: 12,
-    padding: 16,
+  ctaButton: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    paddingVertical: 18,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 16,
   },
-  buttonText: {
-    color: 'white',
+  ctaButtonText: {
+    color: '#000000',
     fontSize: 16,
     fontWeight: '600',
-  },
-  infoText: {
-    fontSize: 14,
-    marginBottom: 8,
-    lineHeight: 20,
   },
 });
