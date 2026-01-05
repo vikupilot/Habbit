@@ -1,5 +1,5 @@
 const express = require('express');
-const { readFavorites, writeFavorites } = require('../utils/fileOperations');
+const { readFavorites, writeFavorites, readStreakSettings, writeStreakSettings, readNotificationSettings, writeNotificationSettings } = require('../utils/fileOperations');
 const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
@@ -118,6 +118,83 @@ router.put('/reorder', authenticateToken, async (req, res) => {
     res.json({ success: true, favorites: reorderedFavorites });
   } catch (error) {
     console.error('Reorder favorites error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Get streak settings
+router.get('/streak-settings', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const settings = await readStreakSettings();
+    const userSettings = settings[userId] || { minTasksPerDay: 1 };
+    res.json({ success: true, settings: userSettings });
+  } catch (error) {
+    console.error('Get streak settings error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Update streak settings
+router.put('/streak-settings', authenticateToken, async (req, res) => {
+  try {
+    const { minTasksPerDay } = req.body;
+    const userId = req.user.id;
+
+    if (typeof minTasksPerDay !== 'number' || minTasksPerDay < 1 || minTasksPerDay > 10) {
+      return res.status(400).json({ error: 'minTasksPerDay must be a number between 1 and 10' });
+    }
+
+    const settings = await readStreakSettings();
+    settings[userId] = { minTasksPerDay };
+    await writeStreakSettings(settings);
+
+    res.json({ success: true, settings: { minTasksPerDay } });
+  } catch (error) {
+    console.error('Update streak settings error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Get notification settings
+router.get('/notification-settings', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const settings = await readNotificationSettings();
+    const userSettings = settings[userId] || { enabled: false, hour: 20, minute: 0 };
+    res.json({ success: true, settings: userSettings });
+  } catch (error) {
+    console.error('Get notification settings error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Update notification settings
+router.put('/notification-settings', authenticateToken, async (req, res) => {
+  try {
+    const { enabled, hour, minute } = req.body;
+    const userId = req.user.id;
+
+    if (typeof enabled !== 'boolean') {
+      return res.status(400).json({ error: 'enabled must be a boolean' });
+    }
+
+    if (enabled) {
+      if (typeof hour !== 'number' || hour < 0 || hour > 23) {
+        return res.status(400).json({ error: 'hour must be a number between 0 and 23' });
+      }
+      if (typeof minute !== 'number' || minute < 0 || minute > 59) {
+        return res.status(400).json({ error: 'minute must be a number between 0 and 59' });
+      }
+    }
+
+    const settings = await readNotificationSettings();
+    settings[userId] = { enabled, hour: enabled ? hour : 20, minute: enabled ? minute : 0 };
+    await writeNotificationSettings(settings);
+
+    res.json({ success: true, settings: settings[userId] });
+  } catch (error) {
+    console.error('Update notification settings error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

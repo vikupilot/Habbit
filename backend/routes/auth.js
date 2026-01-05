@@ -40,6 +40,7 @@ router.post('/signup', async (req, res) => {
       email,
       password: hashedPassword,
       authProvider: 'email', // Track auth method for future OAuth support
+      gender: null, // 'male', 'female', or null
       createdAt: new Date().toISOString(),
     };
 
@@ -54,6 +55,7 @@ router.post('/signup', async (req, res) => {
         id: userId,
         fullName,
         email,
+        gender: null,
       },
     });
   } catch (error) {
@@ -97,6 +99,7 @@ router.post('/login', async (req, res) => {
         id: user.id,
         fullName: user.fullName,
         email: user.email,
+        gender: user.gender || null,
       },
     });
   } catch (error) {
@@ -120,9 +123,13 @@ router.get('/me', authenticateToken, async (req, res) => {
     }
 
     res.json({
-      id: user.id,
-      fullName: user.fullName,
-      email: user.email,
+      success: true,
+      user: {
+        id: user.id,
+        fullName: user.fullName,
+        email: user.email,
+        gender: user.gender || null,
+      },
     });
   } catch (error) {
     console.error('Get user error:', error);
@@ -209,6 +216,52 @@ router.post('/forgot-password', async (req, res) => {
     });
   } catch (error) {
     console.error('[FORGOT PASSWORD] ❌ Unexpected error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Update user profile
+router.put('/profile', authenticateToken, async (req, res) => {
+  try {
+    const { fullName, gender } = req.body;
+    const users = await readUsers();
+    
+    // Normalize email for case-insensitive lookup
+    const normalizedEmail = normalizeEmail(req.user.email);
+    const user = users[normalizedEmail] || 
+      Object.values(users).find(u => u.email && normalizeEmail(u.email) === normalizedEmail);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Update fields if provided
+    if (fullName !== undefined) {
+      user.fullName = fullName;
+    }
+    if (gender !== undefined) {
+      if (gender !== null && gender !== 'male' && gender !== 'female') {
+        return res.status(400).json({ error: 'Gender must be "male", "female", or null' });
+      }
+      user.gender = gender;
+    }
+
+    // Use normalized email as key
+    delete users[normalizedEmail]; // Remove old key if different case
+    users[normalizedEmail] = user;
+    await writeUsers(users);
+
+    res.json({
+      success: true,
+      user: {
+        id: user.id,
+        fullName: user.fullName,
+        email: user.email,
+        gender: user.gender || null,
+      },
+    });
+  } catch (error) {
+    console.error('Update profile error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

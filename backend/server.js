@@ -37,11 +37,13 @@ ensureDataDirectory();
 const authRoutes = require('./routes/auth');
 const plannerRoutes = require('./routes/planner');
 const dashboardRoutes = require('./routes/dashboard');
+const motivationRoutes = require('./routes/motivation');
 
 // Register routes
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', plannerRoutes);
 app.use('/api/favorites', dashboardRoutes);
+app.use('/api/motivation', motivationRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
