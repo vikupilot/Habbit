@@ -4,4 +4,7 @@
 
 export * from './theme';
 export { authStyles } from './authStyles';
+export { dashboardStyles } from './dashboardStyles';
+export { plannerStyles } from './plannerStyles';
+export { profileStyles } from './profileStyles';
 

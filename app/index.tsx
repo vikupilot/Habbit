@@ -9,8 +9,10 @@ export default function OnboardingScreen() {
   const router = useRouter();
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar style="light" />
+    <View style={styles.container}>
+      <SafeAreaView style={styles.safeAreaTop} edges={['top']}>
+        <StatusBar style="light" />
+      </SafeAreaView>
       
       {/* Illustration Area */}
       <View style={styles.illustrationContainer}>
@@ -21,27 +23,32 @@ export default function OnboardingScreen() {
       </View>
 
       {/* Content Block */}
-      <View style={styles.contentBlock}>
-        <Text style={styles.title}>Build Better Habits</Text>
-        <Text style={styles.description}>
-          Track Your Daily Habits And Achieve Your Goals One Step At A Time.
-        </Text>
-        
-        <TouchableOpacity 
-          style={styles.ctaButton}
-          onPress={() => router.push('/signup')}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.ctaButtonText}>Let's Get Started</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+      <SafeAreaView style={styles.contentBlockWrapper} edges={['bottom']}>
+        <View style={styles.contentBlock}>
+          <Text style={styles.title}>Build Better Habits</Text>
+          <Text style={styles.description}>
+            Track Your Daily Habits And Achieve Your Goals One Step At A Time.
+          </Text>
+          
+          <TouchableOpacity 
+            style={styles.ctaButton}
+            onPress={() => router.push('/signup')}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.ctaButtonText}>Let's Get Started</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
+  safeAreaTop: {
     backgroundColor: '#FFFFFF',
   },
   illustrationContainer: {
@@ -59,6 +66,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'relative',
   },
+  contentBlockWrapper: {
+    backgroundColor: '#000000',
+  },
   contentBlock: {
     backgroundColor: '#000000',
     borderTopLeftRadius: 32,
@@ -66,7 +76,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     paddingTop: 40,
     paddingBottom: 50,
-    minHeight: 280,
   },
   title: {
     fontSize: 32,
