@@ -17,8 +17,8 @@ export const profileStyles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: Spacing.xl,
+    justifyContent: 'flex-start',
+    marginBottom: Spacing.md,
     paddingTop: Spacing.sm,
   },
   backButton: {
@@ -39,12 +39,13 @@ export const profileStyles = StyleSheet.create({
   },
   profileSection: {
     alignItems: 'center',
-    marginBottom: Spacing.xl,
-    paddingVertical: Spacing.lg,
+    marginBottom: Spacing.sm,
+    paddingVertical: Spacing.sm,
+    marginTop: -Spacing.md,
   },
   avatarContainer: {
     position: 'relative',
-    marginBottom: Spacing.md,
+    marginBottom: Spacing.sm,
   },
   avatar: {
     width: 100,
@@ -84,9 +85,25 @@ export const profileStyles = StyleSheet.create({
   userEmail: {
     fontSize: Typography.base,
     color: Colors.gray600,
+    marginBottom: Spacing.md,
+  },
+  expandButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: Spacing.xs,
+    paddingHorizontal: Spacing.md,
+    marginTop: Spacing.xs,
+    marginBottom: 0,
   },
   section: {
-    marginBottom: Spacing.xl,
+    marginBottom: Spacing.lg,
+    marginTop: 0,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: Spacing.md,
   },
   sectionTitle: {
     fontSize: Typography.base,
@@ -230,6 +247,64 @@ export const profileStyles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: Colors.gray200,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: Spacing.lg,
+  },
+  modalContent: {
+    backgroundColor: Colors.white,
+    borderRadius: BorderRadius.lg,
+    padding: Spacing.lg,
+    width: '100%',
+    maxWidth: 400,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: Spacing.md,
+  },
+  modalTitle: {
+    fontSize: Typography.lg,
+    fontWeight: Typography.bold,
+    color: Colors.black,
+  },
+  modalCloseButton: {
+    width: 32,
+    height: 32,
+    borderRadius: BorderRadius.md,
+    backgroundColor: Colors.inputBackground,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalDescription: {
+    fontSize: Typography.sm,
+    color: Colors.gray600,
+    lineHeight: 20,
+    marginBottom: Spacing.md,
+  },
+  modalLabel: {
+    fontSize: Typography.base,
+    fontWeight: Typography.semibold,
+    color: Colors.black,
+  },
+  modalButton: {
+    backgroundColor: Colors.black,
+    borderRadius: BorderRadius.lg,
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: Spacing.md,
+  },
+  modalButtonText: {
+    fontSize: Typography.base,
+    fontWeight: Typography.semibold,
+    color: Colors.white,
   },
 });
 

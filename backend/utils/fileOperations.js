@@ -6,6 +6,8 @@ const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const TASKS_FILE = path.join(DATA_DIR, 'tasks.json');
 const FAVORITES_FILE = path.join(DATA_DIR, 'favorites.json');
 const RESET_TOKENS_FILE = path.join(DATA_DIR, 'resetTokens.json');
+const STREAK_SETTINGS_FILE = path.join(DATA_DIR, 'streakSettings.json');
+const NOTIFICATION_SETTINGS_FILE = path.join(DATA_DIR, 'notificationSettings.json');
 
 // Ensure data directory exists
 async function ensureDataDirectory() {
@@ -107,6 +109,48 @@ async function writeResetTokens(tokens) {
   }
 }
 
+// Streak settings file operations
+async function readStreakSettings() {
+  try {
+    const data = await fs.readFile(STREAK_SETTINGS_FILE, 'utf8');
+    const settings = JSON.parse(data);
+    return settings || {};
+  } catch (error) {
+    return {};
+  }
+}
+
+async function writeStreakSettings(settings) {
+  try {
+    await ensureDataDirectory();
+    await fs.writeFile(STREAK_SETTINGS_FILE, JSON.stringify(settings, null, 2), 'utf8');
+  } catch (error) {
+    console.error('Error writing streak settings file:', error);
+    throw error;
+  }
+}
+
+// Notification settings file operations
+async function readNotificationSettings() {
+  try {
+    const data = await fs.readFile(NOTIFICATION_SETTINGS_FILE, 'utf8');
+    const settings = JSON.parse(data);
+    return settings || {};
+  } catch (error) {
+    return {};
+  }
+}
+
+async function writeNotificationSettings(settings) {
+  try {
+    await ensureDataDirectory();
+    await fs.writeFile(NOTIFICATION_SETTINGS_FILE, JSON.stringify(settings, null, 2), 'utf8');
+  } catch (error) {
+    console.error('Error writing notification settings file:', error);
+    throw error;
+  }
+}
+
 module.exports = {
   ensureDataDirectory,
   readUsers,
@@ -117,5 +161,9 @@ module.exports = {
   writeFavorites,
   readResetTokens,
   writeResetTokens,
+  readStreakSettings,
+  writeStreakSettings,
+  readNotificationSettings,
+  writeNotificationSettings,
 };
 

@@ -22,74 +22,63 @@ export const dashboardStyles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: Spacing.md,
-    paddingTop: Spacing.sm,
+    paddingTop: Spacing.md,
   },
-  greetingContainer: {
+  welcomeContainer: {
     flex: 1,
   },
-  greeting: {
+  welcomeText: {
     fontSize: Typography.xs,
     color: Colors.gray600,
-    marginBottom: 2,
+    fontWeight: Typography.medium,
   },
-  userName: {
+  userNameText: {
     fontSize: Typography.base,
-    fontWeight: Typography.bold,
     color: Colors.black,
+    fontWeight: Typography.bold,
+    marginTop: 2,
   },
   headerIcons: {
     flexDirection: 'row',
     gap: Spacing.sm,
+    marginTop: Spacing.xs,
   },
   iconButton: {
-    width: 36,
-    height: 36,
+    width: 40,
+    height: 40,
     borderRadius: BorderRadius.md,
     backgroundColor: Colors.inputBackground,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  createTaskButton: {
+  motivationalQuoteContainer: {
     backgroundColor: Colors.black,
     borderRadius: BorderRadius.lg,
     padding: Spacing.lg,
-    marginBottom: Spacing.xl,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  createTaskIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: Colors.gray600,
-    alignItems: 'center',
+    marginBottom: Spacing.md,
+    minHeight: 100,
     justifyContent: 'center',
-    marginRight: Spacing.md,
+    alignItems: 'center',
   },
-  createTaskContent: {
-    flex: 1,
-  },
-  createTaskTitle: {
+  motivationalQuoteText: {
     fontSize: Typography.base,
-    fontWeight: Typography.bold,
+    fontWeight: Typography.medium,
     color: Colors.white,
-    marginBottom: 4,
-  },
-  createTaskSubtitle: {
-    fontSize: Typography.xs,
-    color: Colors.gray400,
+    textAlign: 'center',
+    lineHeight: 24,
+    fontStyle: 'italic',
   },
   sectionTitle: {
     fontSize: Typography.base,
     fontWeight: Typography.bold,
     color: Colors.black,
-    marginBottom: Spacing.md,
+    marginBottom: Spacing.sm,
   },
   summaryGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: Spacing.md,
-    marginBottom: Spacing.xl,
+    marginBottom: Spacing.md,
   },
   summaryCard: {
     flex: 1,
@@ -118,6 +107,7 @@ export const dashboardStyles = StyleSheet.create({
     fontSize: Typography.xl,
     fontWeight: Typography.bold,
     color: Colors.black,
+    textAlign: 'center',
   },
   activitySection: {
     marginBottom: Spacing.xl,
@@ -157,6 +147,84 @@ export const dashboardStyles = StyleSheet.create({
   chartLabel: {
     fontSize: Typography.xs,
     color: Colors.gray600,
+  },
+  timeFilterContainer: {
+    flexDirection: 'row',
+    gap: Spacing.xs,
+    marginBottom: Spacing.sm,
+    backgroundColor: Colors.inputBackground,
+    borderRadius: BorderRadius.md,
+    padding: Spacing.xs,
+  },
+  timeFilterButton: {
+    flex: 1,
+    paddingVertical: Spacing.xs,
+    paddingHorizontal: Spacing.sm,
+    borderRadius: BorderRadius.sm,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  timeFilterButtonActive: {
+    backgroundColor: Colors.black,
+  },
+  timeFilterButtonText: {
+    fontSize: Typography.sm,
+    fontWeight: Typography.medium,
+    color: Colors.gray600,
+  },
+  timeFilterButtonTextActive: {
+    color: Colors.white,
+    fontWeight: Typography.semibold,
+  },
+  weeklyChartContainer: {
+    backgroundColor: Colors.inputBackground,
+    borderRadius: BorderRadius.lg,
+    padding: Spacing.md,
+    marginBottom: Spacing.md,
+  },
+  weeklyChartTitle: {
+    fontSize: Typography.base,
+    fontWeight: Typography.bold,
+    color: Colors.black,
+    marginBottom: Spacing.md,
+  },
+  weeklyChartContent: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    height: 140,
+    paddingBottom: Spacing.sm,
+  },
+  weeklyChartBarWrapper: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    height: '100%',
+    width: '100%',
+  },
+  weeklyChartBar: {
+    width: '40%',
+    marginHorizontal: 2,
+    borderRadius: BorderRadius.sm,
+    minHeight: 8,
+    backgroundColor: Colors.black,
+  },
+  weeklyChartDayContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    height: '100%',
+  },
+  weeklyChartDayLabel: {
+    fontSize: Typography.xs,
+    color: Colors.gray600,
+    marginTop: Spacing.xs,
+  },
+  weeklyChartValue: {
+    fontSize: Typography.xs,
+    color: Colors.black,
+    fontWeight: Typography.semibold,
+    marginBottom: Spacing.xs,
   },
 });
 

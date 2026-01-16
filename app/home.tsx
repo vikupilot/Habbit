@@ -65,19 +65,6 @@ export default function HomeScreen() {
             <TouchableOpacity
               style={[
                 styles.floatingButton,
-                activeTab === 'dashboard' && styles.floatingButtonActive,
-              ]}
-              onPress={() => setActiveTab('dashboard')}
-              activeOpacity={0.8}
-            >
-              <LayoutDashboard
-                size={20}
-                color={activeTab === 'dashboard' ? '#000000' : '#FFFFFF'}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.floatingButton,
                 activeTab === 'planner' && styles.floatingButtonActive,
               ]}
               onPress={() => setActiveTab('planner')}
@@ -86,6 +73,19 @@ export default function HomeScreen() {
               <Calendar
                 size={20}
                 color={activeTab === 'planner' ? '#000000' : '#FFFFFF'}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.floatingButton,
+                activeTab === 'dashboard' && styles.floatingButtonActive,
+              ]}
+              onPress={() => setActiveTab('dashboard')}
+              activeOpacity={0.8}
+            >
+              <LayoutDashboard
+                size={20}
+                color={activeTab === 'dashboard' ? '#000000' : '#FFFFFF'}
               />
             </TouchableOpacity>
           </View>

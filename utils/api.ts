@@ -111,7 +111,20 @@ class ApiClient {
   }
 
   async getMe() {
-    return this.request<{ id: string; fullName: string; email: string }>('/api/auth/me');
+    const response = await this.request<{ success: boolean; user: { id: string; fullName: string; email: string; gender: string | null } }>('/api/auth/me');
+    return response.user;
+  }
+
+  async updateProfile(fullName?: string, gender?: 'male' | 'female' | null) {
+    const response = await this.request<{ success: boolean; user: { id: string; fullName: string; email: string; gender: string | null } }>('/api/auth/profile', {
+      method: 'PUT',
+      body: JSON.stringify({ fullName, gender }),
+    });
+    // Update local storage
+    if (response.user) {
+      await AsyncStorage.setItem('user', JSON.stringify(response.user));
+    }
+    return response;
   }
 
   // Task methods
@@ -188,6 +201,75 @@ class ApiClient {
       method: 'PUT',
       body: JSON.stringify({ favoriteIds }),
     });
+  }
+
+  // Motivation methods
+  async getDailyQuote() {
+    return this.request<{ success: boolean; quote: string; date: string }>('/api/motivation/daily');
+  }
+
+  // Streak settings methods
+  async getStreakSettings() {
+    const response = await this.request<{ success: boolean; settings: { minTasksPerDay: number } }>('/api/favorites/streak-settings');
+    return response.settings;
+  }
+
+  async updateStreakSettings(minTasksPerDay: number) {
+    return this.request<{ success: boolean; settings: { minTasksPerDay: number } }>('/api/favorites/streak-settings', {
+      method: 'PUT',
+      body: JSON.stringify({ minTasksPerDay }),
+    });
+  }
+
+  // Notification settings methods
+  async getNotificationSettings() {
+    const response = await this.request<{ success: boolean; settings: { enabled: boolean; hour: number; minute: number } }>('/api/favorites/notification-settings');
+    return response.settings;
+  }
+
+  async updateNotificationSettings(enabled: boolean, hour?: number, minute?: number) {
+    return this.request<{ success: boolean; settings: { enabled: boolean; hour: number; minute: number } }>('/api/favorites/notification-settings', {
+      method: 'PUT',
+      body: JSON.stringify({ enabled, hour, minute }),
+    });
+  }
+
+  // Google OAuth methods
+  async signInWithGoogle(code: string, redirectUri: string) {
+    const response = await this.request<{
+      success: boolean;
+      token: string;
+      user: { id: string; fullName: string; email: string; gender: string | null; picture?: string | null };
+    }>('/api/auth/google', {
+      method: 'POST',
+      body: JSON.stringify({ code, redirectUri }),
+    });
+
+    if (response.success) {
+      await AsyncStorage.setItem('token', response.token);
+      await AsyncStorage.setItem('user', JSON.stringify(response.user));
+    }
+
+    return response;
+  }
+
+  // Apple OAuth methods (for future)
+  async signInWithApple(identityToken: string, authorizationCode: string, user: string) {
+    const response = await this.request<{
+      success: boolean;
+      token: string;
+      user: { id: string; fullName: string; email: string; gender: string | null };
+    }>('/api/auth/apple', {
+      method: 'POST',
+      body: JSON.stringify({ identityToken, authorizationCode, user }),
+    });
+
+    if (response.success) {
+      await AsyncStorage.setItem('token', response.token);
+      await AsyncStorage.setItem('user', JSON.stringify(response.user));
+    }
+
+    return response;
   }
 }
 
