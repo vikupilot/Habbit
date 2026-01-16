@@ -233,6 +233,44 @@ class ApiClient {
       body: JSON.stringify({ enabled, hour, minute }),
     });
   }
+
+  // Google OAuth methods
+  async signInWithGoogle(code: string, redirectUri: string) {
+    const response = await this.request<{
+      success: boolean;
+      token: string;
+      user: { id: string; fullName: string; email: string; gender: string | null; picture?: string | null };
+    }>('/api/auth/google', {
+      method: 'POST',
+      body: JSON.stringify({ code, redirectUri }),
+    });
+
+    if (response.success) {
+      await AsyncStorage.setItem('token', response.token);
+      await AsyncStorage.setItem('user', JSON.stringify(response.user));
+    }
+
+    return response;
+  }
+
+  // Apple OAuth methods (for future)
+  async signInWithApple(identityToken: string, authorizationCode: string, user: string) {
+    const response = await this.request<{
+      success: boolean;
+      token: string;
+      user: { id: string; fullName: string; email: string; gender: string | null };
+    }>('/api/auth/apple', {
+      method: 'POST',
+      body: JSON.stringify({ identityToken, authorizationCode, user }),
+    });
+
+    if (response.success) {
+      await AsyncStorage.setItem('token', response.token);
+      await AsyncStorage.setItem('user', JSON.stringify(response.user));
+    }
+
+    return response;
+  }
 }
 
 export const apiClient = new ApiClient();

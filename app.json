@@ -41,6 +41,9 @@
     "plugins": [
       "expo-router",
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "googleClientId": "462216399110-vea4psjh612ras8dfrkr61c66n5vafkq.apps.googleusercontent.com"
+    }
   }
 }

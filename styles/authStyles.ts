@@ -33,16 +33,28 @@ export const authStyles = StyleSheet.create({
   header: {
     marginBottom: Spacing.xl,
   },
+  animatedHeader: {
+    marginBottom: Spacing.xxl * 3,
+    alignItems: 'center',
+  },
   title: {
     fontSize: Typography.xl,
     fontWeight: Typography.bold,
     color: Colors.black,
     marginBottom: Spacing.xs,
+    textAlign: 'center',
   },
   subtitle: {
     fontSize: Typography.sm,
     color: Colors.gray600,
     lineHeight: 20,
+    textAlign: 'center',
+  },
+
+  // Decorative Element
+  decorativeElement: {
+    height: 200,
+    marginVertical: Spacing.xl,
   },
 
   // Form
@@ -141,6 +153,46 @@ export const authStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: Typography.bold,
     color: Colors.white,
+  },
+
+  // Sign in prompt
+  signInPrompt: {
+    fontSize: Typography.xs,
+    color: Colors.gray600,
+    textAlign: 'center',
+    marginTop: Spacing.xxl,
+    marginBottom: Spacing.md,
+    fontWeight: Typography.medium,
+  },
+
+  // OAuth Buttons (Minimalistic Small Icons)
+  oauthContainer: {
+    marginTop: Spacing.lg,
+    marginBottom: Spacing.lg,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: Spacing.lg,
+  },
+  oauthButton: {
+    width: 56,
+    height: 56,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.black,
+    borderRadius: BorderRadius.md,
+  },
+  oauthButtonApple: {
+    backgroundColor: Colors.black,
+  },
+  oauthButtonIcon: {
+    fontSize: 24,
+    fontWeight: Typography.bold,
+    color: Colors.white,
+  },
+  oauthButtonText: {
+    color: Colors.white,
+    fontSize: Typography.base,
+    fontWeight: Typography.semibold,
   },
 
   // Links

@@ -1,35 +1,74 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Alert, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, ScrollView, Alert, ActivityIndicator, Animated } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { BackButton, AuthInput, SocialButtons } from '../modules/auth';
+import { BackButton } from '../modules/auth';
+import { HabbitPyramid } from '../modules/common/components/HabbitPyramid';
 import { authStyles } from '../styles/authStyles';
 import { apiClient } from '../utils/api';
+import { signInWithGoogle, GOOGLE_REDIRECT_URI, verifyRedirectUri } from '../utils/googleAuth';
+import { signInWithApple } from '../utils/appleAuth';
 
 export default function LoginScreen() {
   const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [socialLoading, setSocialLoading] = useState(false);
+  const fadeAnim = new Animated.Value(0);
+  const slideAnim = new Animated.Value(50);
 
-  const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert('Error', 'Please fill in all fields');
-      return;
-    }
+  // Verify redirect URI and client ID on component mount (for debugging)
+  useEffect(() => {
+    verifyRedirectUri();
+    
+    // Start animations
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, []);
 
-    setLoading(true);
+  const handleGoogleSignIn = async () => {
+    setSocialLoading(true);
     try {
-      const response = await apiClient.login(email, password);
+      const result = await signInWithGoogle();
+      if (!result) {
+        setSocialLoading(false);
+        return; // User canceled
+      }
+
+      const response = await apiClient.signInWithGoogle(result.code, GOOGLE_REDIRECT_URI);
       if (response.success) {
         router.replace('/home');
       }
     } catch (error: any) {
-      Alert.alert('Login Failed', error.message || 'Please check your credentials');
+      Alert.alert('Google Sign-In Failed', error.message || 'Failed to sign in with Google. Please try again.');
     } finally {
-      setLoading(false);
+      setSocialLoading(false);
+    }
+  };
+
+  const handleAppleSignIn = async () => {
+    setSocialLoading(true);
+    try {
+      const result = await signInWithApple();
+      if (!result) {
+        setSocialLoading(false);
+        return; // User canceled or not available
+      }
+
+      Alert.alert('Coming Soon', 'Apple Sign-In will be available soon.');
+    } catch (error: any) {
+      Alert.alert('Apple Sign-In Failed', error.message || 'Failed to sign in with Apple. Please try again.');
+    } finally {
+      setSocialLoading(false);
     }
   };
 
@@ -37,75 +76,83 @@ export default function LoginScreen() {
     <SafeAreaView style={authStyles.container}>
       <StatusBar style="dark" />
       <ScrollView
-        contentContainerStyle={authStyles.scrollContent}
+        contentContainerStyle={[authStyles.scrollContent, { justifyContent: 'center' }]}
         showsVerticalScrollIndicator={false}
       >
         <BackButton />
 
-        {/* Header */}
-        <View style={authStyles.header}>
-          <Text style={authStyles.title}>Welcome Back</Text>
+        {/* Animated Header */}
+        <Animated.View
+          style={[
+            authStyles.header,
+            authStyles.animatedHeader,
+            {
+              opacity: fadeAnim,
+              transform: [{ translateY: slideAnim }],
+            },
+          ]}
+        >
+          <Text style={authStyles.title}>Welcome to Habbit</Text>
           <Text style={authStyles.subtitle}>
-            Fill Your Details Or Continue With Social Media
+            Build better habits, one day at a time
           </Text>
-        </View>
+        </Animated.View>
 
-        {/* Form Fields */}
-        <View style={authStyles.form}>
-          <AuthInput
-            type="email"
-            placeholder="Email Address"
-            value={email}
-            onChangeText={setEmail}
-          />
+        {/* Animated Habbit Pyramid */}
+        <Animated.View
+          style={[
+            {
+              opacity: fadeAnim,
+              transform: [{ scale: fadeAnim }],
+              marginTop: -40,
+              marginBottom: 20,
+            },
+          ]}
+        >
+          <HabbitPyramid size={220} />
+        </Animated.View>
 
-          <AuthInput
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            showPassword={showPassword}
-            onTogglePassword={() => setShowPassword(!showPassword)}
-          />
+        {/* Sign in prompt - Above buttons */}
+        <Text style={authStyles.signInPrompt}>Sign in with your favorite social media</Text>
 
-          {/* Forgot Password */}
-          <TouchableOpacity 
-            style={authStyles.forgotPassword}
-            onPress={() => router.push('/forgot-password')}
-          >
-            <Text style={authStyles.forgotPasswordText}>Forgot Password?</Text>
-          </TouchableOpacity>
-
-          {/* Sign In Button */}
-          <TouchableOpacity 
-            style={[authStyles.primaryButton, loading && { opacity: 0.6 }]} 
-            onPress={handleLogin}
+        {/* OAuth Buttons - Minimalistic */}
+        <Animated.View
+          style={[
+            authStyles.oauthContainer,
+            {
+              opacity: fadeAnim,
+              transform: [{ translateY: Animated.multiply(slideAnim, -1) }],
+            },
+          ]}
+        >
+          {/* Google Button */}
+          <TouchableOpacity
+            style={[authStyles.oauthButton, socialLoading && { opacity: 0.6 }]}
+            onPress={handleGoogleSignIn}
             activeOpacity={0.8}
-            disabled={loading}
+            disabled={socialLoading}
           >
-            {loading ? (
-              <ActivityIndicator color="#FFFFFF" />
+            {socialLoading ? (
+              <ActivityIndicator color="#FFFFFF" size="small" />
             ) : (
-              <Text style={authStyles.primaryButtonText}>Sign In</Text>
+              <Text style={authStyles.oauthButtonIcon}>G</Text>
             )}
           </TouchableOpacity>
-        </View>
 
-        {/* Social Media Section */}
-        <SocialButtons />
-
-        {/* Sign Up Link */}
-        <View style={authStyles.linkContainer}>
-          <Text style={authStyles.linkText}>
-            Don't Have An Account?{' '}
-            <Text
-              style={authStyles.linkButton}
-              onPress={() => router.push('/signup')}
-            >
-              Sign Up
-            </Text>
-          </Text>
-        </View>
+          {/* Apple Button */}
+          <TouchableOpacity
+            style={[authStyles.oauthButton, authStyles.oauthButtonApple, socialLoading && { opacity: 0.6 }]}
+            onPress={handleAppleSignIn}
+            activeOpacity={0.8}
+            disabled={socialLoading}
+          >
+            {socialLoading ? (
+              <ActivityIndicator color="#FFFFFF" size="small" />
+            ) : (
+              <Text style={authStyles.oauthButtonIcon}>🍎</Text>
+            )}
+          </TouchableOpacity>
+        </Animated.View>
       </ScrollView>
     </SafeAreaView>
   );
